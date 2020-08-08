@@ -1,33 +1,52 @@
 import React from 'react'
 import Whatsapp from '../../assets/images/icons/whatsapp.svg'
 import './styles.css'
+import api from '../../services/api'
 
-function TeacherItem(){
+export interface  Teacher {
+        avatar: string,
+        bio: string,
+        cost: number,
+        id: number,
+        name: string,
+        subject: string,
+        whatsapp: string,
+}
+
+interface TeacherItemProps {
+    teacher: Teacher,
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({teacher}) => {
+    function createNewConnection(){
+        api.post('connections', {
+            user_id: teacher.id,
+        })
+    }
+
     return(
         <article className="teacher-item">
                     <header>
-                        <img src="https://png.pngtree.com/element_our/png/20181206/users-vector-icon-png_260862.jpg" alt="Exemplo de Proffy"/>
+                        <img src={teacher.avatar} alt={teacher.name}/>
                         <div>
-                            <strong>Um Proffy</strong>
-                            <span>A Matéria que ele leciona</span>
+                        <strong>{teacher.name}</strong>
+                            <span>{teacher.subject}</span>
                         </div>
                     </header>
 
                     <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut malesuada ex vel sagittis ornare. Suspendisse potenti. 
-                    <br/> <br />
-                    Proin pulvinar massa id augue bibendum sagittis. Quisque magna libero, dictum sit amet lacinia eu, dictum vel diam. Aenean tristique cursus diam non mollis. Aenean varius tincidunt aliquet. Sed a ex rhoncus, commodo magna a, feugiat odio. Praesent ultrices leo quam, faucibus convallis risus ultrices in. Sed ipsum odio, auctor at velit eu, ultricies mattis nunc. In consectetur erat non erat tempor, eu sollicitudin metus mollis. Duis sem augue, auctor ac euismod at, lacinia id est.
+                    {teacher.bio} 
                     </p>
 
                     <footer>
                         <p>
                             Preço/hora
-                            <strong>R$ 20,00</strong>
+                            <strong> R$ {teacher.cost}</strong>
                         </p>
-                        <button type="button" >
+                        <a onClick={createNewConnection} href={`https://wa.me/${teacher.whatsapp}`} >
                             <img src={Whatsapp} alt="whatsapp"/>
                             Entrar em contato
-                        </button>
+                        </a>
                     </footer>
                 </article>
     )
